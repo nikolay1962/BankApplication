@@ -1,16 +1,16 @@
 package my.bank;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
-
+public class TestAccountHolders {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
 
-        Bank bank = new Bank("My personal Bank");
+        BankAccountHolders bank = new BankAccountHolders("My Bank of Account Holders");
 
         boolean proceed = true;
         while (proceed) {
@@ -55,61 +55,57 @@ public class Main {
 
     }
 
-    private static void withdrawMoney(Bank bank) {
-        System.out.print("Please, enter UserId:");
-        String userId = scanner.nextLine();
-        System.out.print("Please, enter accountId:");
-        long accountId = scanner.nextLong();
-        scanner.nextLine();
+    private static void withdrawMoney(BankAccountHolders bank) {
+        System.out.print("Please, enter AccountHolder name:");
+        String name = scanner.nextLine();
         System.out.print("Please, enter amount of Money to Withdraw:");
         double amountOfMoney = scanner.nextDouble();
         scanner.nextLine();
-        bank.withdrawMoneyFromUser(userId, accountId, amountOfMoney);
+        bank.withdrawMoneyFromUser(name, amountOfMoney);
     }
 
-    private static void addAccountToUser(Bank bank) {
-        System.out.print("Please, enter UserId:");
-        String userId = scanner.nextLine();
+    private static void addAccountToUser(BankAccountHolders bank) {
+        System.out.print("Please, enter accountHolder:");
+        String accountHolder = scanner.nextLine();
         System.out.print("Please, enter currency for Account:");
         String currency = scanner.nextLine();
-        bank.addAccountToUser(userId, currency);
+        bank.addAccountToUser(accountHolder, currency);
     }
 
-    private static void printUserData(Bank bank) {
-        System.out.print("Please, enter UserId:");
-        String userId = scanner.nextLine();
-        bank.printUserData(userId);
+    private static void printUserData(BankAccountHolders bank) {
+        System.out.print("Please, enter accountHolder:");
+        String accountHolder = scanner.nextLine();
+        bank.printUserData(accountHolder);
     }
 
-    private static void addMoneyToUser(Bank bank) {
-        System.out.print("Please, enter UserId:");
-        String userId = scanner.nextLine();
-        System.out.print("Please, enter accountId:");
-        long accountId = scanner.nextLong();
-        scanner.nextLine();
+    private static void addMoneyToUser(BankAccountHolders bank) {
+        System.out.print("Please, enter accountHolder:");
+        String accountHolder = scanner.nextLine();
+
         System.out.print("Please, enter amount of Money to add:");
         double amountOfMoney = scanner.nextDouble();
         scanner.nextLine();
-        bank.addMoneyToUser(userId, accountId, amountOfMoney);
+        bank.addMoneyToUser(accountHolder, amountOfMoney);
     }
 
-    private static void addUser(Bank bank) {
-        System.out.print("Please, enter password:");
-        String password = scanner.nextLine();
-        System.out.print("Please, enter fullName:");
-        String fullName = scanner.nextLine();
-        System.out.print("Please, enter address:");
-        String address = scanner.nextLine();
-        System.out.print("Please, enter phoneNumber:");
-        String phoneNumber = scanner.nextLine();
-        System.out.print("Please, enter email:");
-        String email = scanner.nextLine();
-        System.out.print("Please, enter secretQuestion:");
-        String secretQuestion = scanner.nextLine();
-        System.out.print("Please, enter answerForSecretQuestion:");
-        String answerForSecretQuestion = scanner.nextLine();
+    private static void addUser(BankAccountHolders bank) {
+
+        System.out.print("Please, enter accountHolder:");
+        String accountHolder = scanner.nextLine();
         UserType userType = getUserType();
-        bank.addUser(password, fullName, address, phoneNumber, email, secretQuestion, answerForSecretQuestion, userType);
+        Currency currency = getCurrency();
+
+        switch (userType) {
+            case PERSON:
+                bank.addUser(accountHolder, currency);
+                break;
+            case BUSINESS:
+                bank.addBusiness(accountHolder, currency);
+                break;
+            case FUND:
+                bank.addFund(accountHolder, currency);
+                break;
+        }
     }
 
     private static UserType getUserType() {
@@ -128,9 +124,32 @@ public class Main {
                     userType = values.get(choice);
                 }
             } catch (Exception e) {
+
             }
         }
         System.out.println("Your choice is " + userType);
         return userType;
+    }
+
+    private static Currency getCurrency() {
+        Currency currency = null;
+        List<Currency> values = Arrays.asList(Currency.values());
+
+        while (currency == null) {
+            System.out.println("Please, select one or the following values:");
+            for (int i = 0; i < values.size(); i++) {
+                System.out.println("" + (i + 1) + " - " + values.get(i));
+            }
+            String reply = scanner.nextLine();
+            try {
+                int choice = Integer.parseInt(reply) - 1;
+                if (choice >= 0 && choice < values.size()) {
+                    currency = values.get(choice);
+                }
+            } catch (Exception e) {
+            }
+        }
+        System.out.println("Your choice is " + currency);
+        return currency;
     }
 }

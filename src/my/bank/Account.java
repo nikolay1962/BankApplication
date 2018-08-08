@@ -3,20 +3,22 @@ package my.bank;
 public class Account {
     private double balance;
     private long number;
-    private String currency;
+    private Currency currency;
 
-    public Account(String currency) {
+    public Account(Currency currency) {
         this.balance = 0;
         this.number = (long)(Math.random() * 100000000000L);
         this.currency = currency;
     }
 
-    public void AddMoney(double amountOfMoney) {
+    public void addMoney(double amountOfMoney) {
         this.balance += amountOfMoney;
     }
 
     public void withdrawMoney(double amountOfMoney) {
-        this.balance -= amountOfMoney;
+        if (this.balance >= amountOfMoney) {
+            this.balance -= amountOfMoney;
+        }
     }
 
     public double getBalance() {
@@ -27,7 +29,7 @@ public class Account {
         return number;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -35,9 +37,9 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "balance=" + balance +
-                ", number=" + number +
-                ", currency='" + currency + '\'' +
-                '}';
+                "number=" + number +
+                ", balance=" + balance +
+                " currency='" + currency + '\'' +
+                "}\n";
     }
 }

@@ -14,6 +14,7 @@ public class User {
     private String email;
     private String secretQuestion;
     private String answerForSecretQuestion;
+    private UserType userType;
 
     public User(String password,
                 String fullName,
@@ -21,7 +22,8 @@ public class User {
                 String phoneNumber,
                 String email,
                 String secretQuestion,
-                String answerForSecretQuestion) {
+                String answerForSecretQuestion,
+                UserType userType) {
         this.id = UUID.randomUUID().toString();
         this.password = password;
         this.fullName = fullName;
@@ -30,32 +32,32 @@ public class User {
         this.email = email;
         this.secretQuestion = secretQuestion;
         this.answerForSecretQuestion = answerForSecretQuestion;
+        this.userType = userType;
         this.accounts = new ArrayList<>();
     }
 
     public double totalAmountOfMoney() {
         double totalAmount = 0;
-        for (Account account :
-                accounts) {
+        for (Account account : accounts) {
             totalAmount += account.getBalance();
         }
         return totalAmount;
     }
 
-    public void addMoney(long accountId, double amountOfMoney) {
-        for (Account account :
-                accounts) {
+    public void addMoneyToAccount(long accountId, double amountOfMoney) {
+        for (Account account : accounts) {
             if (account.getNumber() == accountId) {
-                account.AddMoney(amountOfMoney);
+                account.addMoney(amountOfMoney);
+                return;
             }
         }
     }
 
     public void withdrawMoney(long accountId, double amountOfMoney) {
-        for (Account account :
-                accounts) {
+        for (Account account : accounts) {
             if (account.getNumber() == accountId) {
                 account.withdrawMoney(amountOfMoney);
+                return;
             }
         }
     }
@@ -97,7 +99,7 @@ public class User {
     }
 
     public void addNewAccount(String currency) {
-        Account newAccount = new Account(currency);
+        Account newAccount = new Account(Currency.valueOf(currency));
         accounts.add(newAccount);
     }
 
@@ -135,16 +137,18 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", password='" + password + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", address='" + address + '\'' +
-                ", accounts=" + accounts +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", secretQuestion='" + secretQuestion + '\'' +
-                ", answerForSecretQuestion='" + answerForSecretQuestion + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("User{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", fullName='").append(fullName).append('\'');
+        sb.append(", address='").append(address).append('\'');
+        sb.append(", phoneNumber='").append(phoneNumber).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", secretQuestion='").append(secretQuestion).append('\'');
+        sb.append(", answerForSecretQuestion='").append(answerForSecretQuestion);
+        sb.append(", User type='").append(userType).append("'\n");
+        sb.append(", accounts=").append(accounts);
+        sb.append('}');
+        return sb.toString();
     }
 }
